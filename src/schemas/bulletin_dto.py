@@ -4,6 +4,7 @@ from typing import Union
 from pydantic import BaseModel, Field, field_validator
 
 from src.schemas.domains import PeriodType
+from src.schemas.worker_dto import WorkerStatus
 
 
 class BulletinRequestDto(BaseModel):
@@ -24,14 +25,13 @@ class BulletinRequestDto(BaseModel):
                 else:
                     d, m, y = v.split("/") if v.__contains__("/") else v.split("-")
                     return date(int(y), int(m), int(d))
-            except Exception as e:
+            except Exception:
                 raise ValueError("Date must be valid")
-
         raise ValueError(f"Date must be valid {v}")
 
 
 class BulletinResponseDto(BaseModel):
     id: str
-    status: str
-    queue: str
-    task: str
+    status: WorkerStatus
+    queue_name: str
+    task_name: str

@@ -4,13 +4,13 @@ from src.schemas.domains import WorkerStatus
 
 
 class WorkerDto(BaseModel):
-    partition_key: str
-    row_key: str
+    PartitionKey: str
+    RowKey: str
 
 
 class WorkerStatusDto(WorkerDto):
     status: WorkerStatus = WorkerStatus.progress
-    request_content: dict
+    request_content: str
 
 
 class WorkerErrorDto(WorkerDto):
