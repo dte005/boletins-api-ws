@@ -4,7 +4,9 @@ from typing import Any
 
 from fastapi import APIRouter
 
-from src.services.celery.publishers.bidding_compare_publisher import publish_task
+from src.services.celery.publishers.bidding.bidding_compare_publisher import (
+    publish_task,
+)
 
 logger = logging.getLogger(__name__)
 
