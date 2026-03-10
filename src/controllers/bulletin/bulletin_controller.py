@@ -14,7 +14,7 @@ class BulletinController:
     def __init__(self):
         self.publisher = Publisher()
         self.table_name = env("AZURE_TABLE_NAME", "")
-        self.partition_key = "bulletin"
+        self.partition_key = env("PARTITION_KEY_BULLETIN", "")
 
     def get_bulletin(self, params: BulletinRequestDto) -> BulletinResponseDto:
         service = AzureDataTableService(table_name=self.table_name)
