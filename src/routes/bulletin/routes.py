@@ -3,6 +3,7 @@ import logging
 from fastapi import APIRouter
 
 from src.controllers.bulletin.bulletin_controller import BulletinController
+from src.errors_handlers import BusinessException
 from src.schemas.bulletin_dto import (
     BulletinRequestDto,
     BulletinResponseDto,
@@ -23,4 +24,4 @@ def retrieve(params: BulletinRequestDto) -> BulletinResponseDto:
 
 @router.get("/status")
 def status() -> None:
-    pass
+    raise BusinessException(message="business test error tester")

@@ -1,6 +1,7 @@
 import logging
 
 from azure.data.tables import TableClient, TableServiceClient
+from fastapi.exceptions import HTTPException
 
 from src.environment import env
 from src.schemas.worker_dto import WorkerStatusDto
@@ -23,5 +24,10 @@ class AzureDataTableService:
         self.table = self.service.get_table_client(table_name=table_name)
 
     def post(self, params: WorkerStatusDto) -> None:
-        self.table.upsert_entity(entity=params.model_dump(mode="json"))
-        self.service.close()
+        try:
+            self.table.upsert_entity(entity=params.model_dump(mode="json"))
+        except Exception as e:
+            logger.error(f"Failed to upsert entity: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
+        finally:
+            self.service.close()

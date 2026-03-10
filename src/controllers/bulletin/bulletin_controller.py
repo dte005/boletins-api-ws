@@ -1,4 +1,5 @@
 from src.environment import env
+from src.errors_handlers import BusinessException
 from src.schemas.bulletin_dto import BulletinRequestDto, BulletinResponseDto
 from src.schemas.worker_dto import WorkerStatusDto
 from src.services.azure.tables.azure_data_table_service import AzureDataTableService
@@ -20,6 +21,9 @@ class BulletinController:
         # Jogar na fila em cloud, gerando o id de identificação
         result = self.publisher.task(params)
         id = result.id if result is not None and result.id is not None else ""
+        if not id:
+            raise BusinessException("Failed to get task id")
+
         worker_status = WorkerStatusDto(
             PartitionKey=self.partition_key,
             RowKey=id,
