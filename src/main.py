@@ -11,8 +11,7 @@ from fastapi.exceptions import HTTPException
 from src.environment import env
 from src.errors_handlers import BusinessException, ErrorsHandlers
 from src.logging_setup import logging_setup
-from src.routes.bidding.routes import router as bidding_router
-from src.routes.bulletin.routes import router as bulletin_router
+from src.routes import bidding_router, bulletin_router, compare_router
 
 # configure the level logger
 level = env("LOG_LEVEL", default="DEBUG")
@@ -21,6 +20,7 @@ logger = logging.getLogger("rpa")
 app = FastAPI(title="RPA bulletin & bidding")
 app.include_router(bulletin_router)
 app.include_router(bidding_router)
+app.include_router(compare_router)
 app.add_exception_handler(HTTPException, ErrorsHandlers.http)
 app.add_exception_handler(BusinessException, ErrorsHandlers.business)
 app.add_exception_handler(Exception, ErrorsHandlers.generic)

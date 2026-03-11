@@ -1,15 +1,16 @@
 from datetime import date
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field, field_validator
 
-from src.schemas.domains import PeriodType
+from src.schemas.domains import PeriodType, PipelineType
 from src.schemas.worker_dto import WorkerStatus
 
 
 class BulletinRequestDto(BaseModel):
-    periodo: PeriodType = Field(default=PeriodType.MRN)
+    period: PeriodType = Field(default=PeriodType.MRN)
     target_date: Union[date, str]
+    type: Optional[PipelineType] = Field(default=PipelineType.BULLETING)
 
     @field_validator("target_date", mode="before")
     @classmethod

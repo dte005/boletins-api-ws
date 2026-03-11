@@ -1,24 +1,16 @@
 import logging
-from collections.abc import Mapping
-from typing import Any
 
 from fastapi import APIRouter
 
-from src.services.celery.publishers.bidding.bidding_compare_publisher import (
-    publish_task,
-)
+from ...controllers import BiddingController
+from ...schemas.bidding_dto import BiddingRequestDto, BiddingResponseDto
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/bidding", tags=["Bidding"])
 
 
-@router.post("/info")
-def retrieve(params: dict) -> dict:
-    result = publish_task(params)
+@router.post("/")
+def retrieve(params: BiddingRequestDto) -> BiddingResponseDto:
+    result = BiddingController().send(params)
     return result
-
-
-@router.post("/compare")
-def compare() -> Mapping[str, Any]:
-    return {"message": "done"}
