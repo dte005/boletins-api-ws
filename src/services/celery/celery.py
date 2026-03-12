@@ -1,6 +1,8 @@
 from celery import Celery
+
 from src.environment import env
 
+# responsible to send tasks
 celery_app = Celery("sender")
 broker = env("CELERY_BROKER_URL", "")
 
