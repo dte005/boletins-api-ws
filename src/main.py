@@ -5,8 +5,9 @@
 # Params will send the params to that method
 import logging
 
-from fastapi import CORSMiddleware, FastAPI
+from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.environment import env
 from src.errors_handlers import BusinessException, ErrorsHandlers
