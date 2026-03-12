@@ -4,6 +4,7 @@ annotated-types==0.7.0
 anyio==4.12.1
 azure-core==1.38.2
 azure-data-tables==12.7.0
+azure-servicebus==7.14.3
 billiard==4.2.4
 celery==5.6.2
 celery-types==0.24.0
