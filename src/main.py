@@ -5,7 +5,7 @@
 # Params will send the params to that method
 import logging
 
-from fastapi import FastAPI
+from fastapi import CORSMiddleware, FastAPI
 from fastapi.exceptions import HTTPException
 
 from src.environment import env
@@ -17,7 +17,19 @@ from src.routes import bidding_router, bulletin_router, compare_router
 level = env("LOG_LEVEL", default="DEBUG")
 logging_setup(level)
 logger = logging.getLogger("rpa")
+
 app = FastAPI(title="RPA bulletin & bidding")
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(bulletin_router)
 app.include_router(bidding_router)
 app.include_router(compare_router)
