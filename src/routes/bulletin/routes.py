@@ -22,5 +22,5 @@ def retrieve(params: BulletinRequestDto) -> BulletinResponseDto:
 
 
 @router.get("/status")
-def status() -> None:
-    raise BusinessException(message="business test error tester")
+def status() -> dict:
+    return {"message": "success"}
