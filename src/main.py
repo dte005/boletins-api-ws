@@ -19,7 +19,7 @@ level = env("LOG_LEVEL", default="DEBUG")
 logging_setup(level)
 logger = logging.getLogger("rpa")
 
-app = FastAPI(title="RPA bulletin & bidding")
+app = FastAPI(title="RPA biddings")
 
 origins = ["*"]
 
