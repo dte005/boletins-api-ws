@@ -3,7 +3,6 @@ import logging
 from fastapi import APIRouter
 
 from src.controllers import BulletinController
-from src.errors_handlers import BusinessException
 from src.schemas.bulletin_dto import (
     BulletinRequestDto,
     BulletinResponseDto,

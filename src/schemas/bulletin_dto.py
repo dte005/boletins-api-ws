@@ -8,6 +8,7 @@ from src.schemas.worker_dto import WorkerStatus
 
 
 class BulletinRequestDto(BaseModel):
+    task_id: Optional[str] = None
     period: PeriodType = Field(default=PeriodType.MRN)
     target_date: Union[date, str]
     type: Optional[PipelineType] = Field(default=PipelineType.BULLETING)

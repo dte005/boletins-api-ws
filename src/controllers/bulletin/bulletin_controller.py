@@ -1,4 +1,5 @@
 import logging
+from uuid import uuid4
 
 from src.environment import env
 from src.errors_handlers import BusinessException
@@ -20,24 +21,24 @@ class BulletinController:
         self.partition_key = env("PARTITION_KEY_BULLETIN", "")
 
     def send(self, params: BulletinRequestDto) -> BulletinResponseDto:
+        task_id = str(uuid4())
         service = AzureDataTableService(table_name=self.table_name)
-        # Jogar na fila em cloud, gerando o id de identificação
-        result = self.publisher.task(params)
-        id = result.id if result is not None and result.id is not None else ""
-        if not id:
-            raise BusinessException("Failed to get task id")
+        params.task_id = task_id
 
         worker_status = WorkerStatusDto(
             PartitionKey=self.partition_key,
-            RowKey=id,
-            status=result.status,
+            RowKey=task_id,
             request_content=str(params.model_dump_json()),
         )
         # Atualizar o Table content na azure com o status
         service.post(worker_status)
         # retornar o id de identificação
+
+        # Jogar na fila em cloud
+        self.publisher.task(params)
+
         return BulletinResponseDto(
-            id=id,
+            id=task_id,
             status=worker_status.status,
             queue_name="bulletin",
             task_name="rpa.bulletin",
