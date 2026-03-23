@@ -2,7 +2,6 @@ import logging
 from uuid import uuid4
 
 from src.environment import env
-from src.errors_handlers import BusinessException
 
 from ...schemas import BulletinRequestDto, BulletinResponseDto, WorkerStatusDto
 from ...services import AzureDataTableService, PublisherBulletin
