@@ -6,6 +6,7 @@ from src.schemas.domains import PipelineType, WorkerStatus
 
 
 class BiddingRequestDto(BaseModel):
+    task_id: Optional[str] = None
     bidding_id: str
     type: Optional[PipelineType] = PipelineType.BIDDING
 
