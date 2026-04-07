@@ -1,0 +1,216 @@
+openapi: 3.1.0
+info:
+  title: Licitações RPA
+  version: 1.0.0
+  description: "API para acionamento dos workers responsáveis por recuperar dados de licitações via Azure Service Bus."
+security:
+  - BearerAuth: []
+servers: [
+  {
+    url: "https://apisdev.estapar.com.br/platform/Bidding",
+    description: "Url de dev base para request",
+  },
+  {
+    url: "https://apishml.estapar.com.br/platform/Bidding",
+    description: "Url de hml base para request",
+  },
+  {
+    url: "https://apis.estapar.com.br/platform/Bidding",
+    description: "Url de prd base para request",
+  }
+]
+paths:
+  /bulletin/:
+    post:
+      tags:
+        - Boletim
+      summary: Recuperar boletim
+      operationId: retrieve_bulletin_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulletinRequestDto'
+        required: true
+      responses:
+        '201':
+          description: >
+            Solicitação aceita com sucesso. A mensagem foi publicada na fila do Azure Service Bus 
+            para processamento assíncrono. O ID retornado pode ser usado para consultar o status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulletinResponseDto'
+  /bidding/:
+    post:
+      tags:
+        - Licitação
+      summary: Recuperar licitação
+      operationId: retrieve_bidding_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BiddingRequestDto'
+        required: true
+      responses:
+        '201':
+          description: >
+            Solicitação aceita com sucesso. A mensagem foi publicada na fila do Azure Service Bus 
+            para processamento assíncrono. O ID retornado pode ser usado para consultar o status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BiddingResponseDto'
+  /compare/:
+    post:
+      tags:
+        - Comparação
+      summary: Comparar
+      operationId: compare_compare_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompareRequestDto'
+        required: true
+      responses:
+        '201':
+          description: >
+            Solicitação aceita com sucesso. A mensagem foi publicada na fila do Azure Service Bus 
+            para processamento assíncrono. O ID retornado pode ser usado para consultar o status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompareResponseDto'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    BiddingRequestDto:
+      properties:
+        bidding_id:
+          type: string
+          title: ID da Licitação
+      required:
+        - bidding_id
+      title: DTO de Requisição de Licitação
+      type: object
+
+    BiddingResponseDto:
+      properties:
+        id:
+          type: string
+          title: ID
+        status:
+          $ref: '#/components/schemas/WorkerStatus'
+        queue_name:
+          type: string
+          title: Nome da Fila
+        task_name:
+          type: string
+          title: Nome da Tarefa
+      required:
+        - id
+        - status
+        - queue_name
+        - task_name
+      title: DTO de Resposta de Licitação
+      type: object
+
+    BulletinRequestDto:
+      properties:
+        period:
+          allOf:
+            - $ref: '#/components/schemas/PeriodType'
+          default: MRN
+        target_date:
+          anyOf:
+            - type: string
+              format: date
+            - type: string
+          title: Data Alvo
+      required:
+        - period
+        - target_date
+      title: DTO de Requisição de Boletim
+      type: object
+
+    BulletinResponseDto:
+      properties:
+        id:
+          type: string
+          title: ID
+        status:
+          $ref: '#/components/schemas/WorkerStatus'
+        queue_name:
+          type: string
+          title: Nome da Fila
+        task_name:
+          type: string
+          title: Nome da Tarefa
+      required:
+        - id
+        - status
+        - queue_name
+        - task_name
+      title: DTO de Resposta de Boletim
+      type: object
+
+    CompareRequestDto:
+      properties:
+        bidding_id:
+          type: string
+          title: ID da Licitação
+      required:
+        - bidding_id
+      title: DTO de Requisição de Comparação
+      type: object
+
+    CompareResponseDto:
+      properties:
+        id:
+          type: string
+          title: ID
+        status:
+          $ref: '#/components/schemas/WorkerStatus'
+        queue_name:
+          type: string
+          title: Nome da Fila
+        task_name:
+          type: string
+          title: Nome da Tarefa
+      required:
+        - id
+        - status
+        - queue_name
+        - task_name
+      title: DTO de Resposta de Comparação
+      type: object
+
+    PeriodType:
+      enum:
+        - MRN
+        - AFT
+        - EVN
+      title: Tipo de Período
+      type: string
+
+    PipelineType:
+      enum:
+        - bulletin
+        - bidding
+        - compare
+      title: Tipo de Pipeline
+      type: string
+
+    WorkerStatus:
+      enum:
+        - success
+        - progress
+        - failure
+      title: Status do Worker
+      type: string
