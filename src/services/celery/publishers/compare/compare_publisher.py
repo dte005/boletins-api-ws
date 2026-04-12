@@ -19,6 +19,7 @@ class Publisher:
             self.task_name,
             args=[params.model_dump(mode="json")],
             queue=self.queue,
+            task_id=params.task_id,
         )
 
         return CompareResponseDto(

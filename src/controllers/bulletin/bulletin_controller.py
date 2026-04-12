@@ -31,7 +31,6 @@ class BulletinController:
         )
         # Atualizar o Table content na azure com o status
         service.post(worker_status)
-        # retornar o id de identificação
 
         # Jogar na fila em cloud
         self.publisher.task(params)

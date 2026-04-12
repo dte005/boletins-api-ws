@@ -1,7 +1,6 @@
 import logging
 from uuid import uuid4
 from src.environment import env
-from src.errors_handlers import BusinessException
 
 from ...schemas import CompareRequestDto, CompareResponseDto, WorkerStatusDto
 from ...services import AzureDataTableService, PublisherCompare
@@ -21,9 +20,8 @@ class CompareController:
 
     def send(self, params: CompareRequestDto) -> CompareResponseDto:
         task_id = str(uuid4())
-        params.task_id = task_id
         service = AzureDataTableService(table_name=self.table_name)
-        # Jogar na fila em cloud, gerando o id de identificação
+        params.task_id = task_id
 
         worker_status = WorkerStatusDto(
             PartitionKey = self.partition_key,
