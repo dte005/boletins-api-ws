@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/bulletin", tags=["Bulletin"])
 
 
-@router.post("/")
+@router.post("")
 def retrieve(params: BulletinRequestDto) -> BulletinResponseDto:
     controller = BulletinController()
     result = controller.send(params)

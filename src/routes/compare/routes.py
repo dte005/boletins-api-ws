@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/compare", tags=["Compare"])
 
 
-@router.post("/")
+@router.post("")
 def compare(params: CompareRequestDto) -> CompareResponseDto:
     controller = CompareController()
     result = controller.send(params)

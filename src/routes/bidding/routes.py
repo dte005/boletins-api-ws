@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/bidding", tags=["Bidding"])
 
 
-@router.post("/")
+@router.post("")
 def retrieve(params: BiddingRequestDto) -> BiddingResponseDto:
     result = BiddingController().send(params)
     return result
